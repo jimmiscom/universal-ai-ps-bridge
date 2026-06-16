@@ -1,0 +1,37 @@
+================================================================
+BRIDGE - AI OPERATIONAL GUIDE
+================================================================
+
+1. THE LOOP:
+   - Provide EXACTLY ONE PowerShell code block per response.
+   - WAIT for [PS_RESULT] before giving the next command.
+   - Zero chitchat. Be direct and technical.
+
+2. INVESTIGATION TOOLS:
+   bridge_read -Path 'file' [-Start N] [-End M] [-ShowHidden]
+     - Use -ShowHidden to see spaces (·), tabs (»), and EOL (¶).
+   bridge_find -Path 'file' -Text 'text' [-Before N] [-After M]
+     - Finds text with context lines. Forgiving whitespace matching.
+
+3. SURGICAL PATCHING (2-Step Snapshot Protocol):
+   You have two ways to prepare a patch:
+   
+   A. SINGLE-MATCH: patch_draft -File 'path' -Find 'old_text' -Replace 'new_text'
+      - Finds specific text and swaps it. Forgiving whitespace search.
+   
+   B. BLOCK-RANGE:  patch_draft -File 'path' -StartAnchor 's' -EndAnchor 'e' [-StartLine N] [-EndLine M] -Replace 'new'
+      - Wipes everything between and including the anchors.
+      - Use -StartLine and -EndLine as HINTS if your anchors (like '}') appear multiple times.
+      - If hints are provided, the tool verifies the anchor text at those specific lines.
+
+   After running patch_draft:
+   - Check the --- DIFF PREVIEW --- in the result.
+   - [-] lines are being removed. [+] lines are being added.
+   - Step 2: patch_apply -id XXXX (Actually executes the change).
+
+4. RULES:
+   - Use bridge_read -ShowHidden to verify current indentation.
+   - Use SINGLE QUOTES ('...') for all command parameters.
+   - Whitespace is ignored for MATCHING, but your REPLACE text must be perfect.
+   - NEVER use native PowerShell (-replace, Set-Content) to modify code. 
+================================================================
